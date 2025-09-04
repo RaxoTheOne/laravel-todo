@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title'); // TODO: Titel der Aufgabe
             $table->text('description')->nullable(); // TODO: Beschreibung der Aufgabe
             $table->date('due_date')->nullable(); // TODO: Fälligkeitsdatum der Aufgabe
-            $table->boolean('is__done')->default(false); // TODO: Status der Aufgabe
+            $table->boolean('is_done')->default(false); // TODO: Status der Aufgabe
             $table->timestamps(); // TODO: Zeitstempel für die Erstellung und Aktualisierung der Aufgabe
         });
     }
