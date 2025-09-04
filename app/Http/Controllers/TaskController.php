@@ -67,6 +67,14 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        // Prüfen: Kommt nur ein Status-Update oder auch andere Eingaben?
+        if ($request->has('is_done') && !$request->has('title')) {
+            $task->is_done = $request->input('is_done');
+            $task->save();
+            return redirect()->route('tasks.index')->with('success', 'Task wurde aktualisiert!');
+
+        }
+
         // Validation der Eingaben
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -91,5 +99,20 @@ class TaskController extends Controller
 
         // Zurück zur Task-Liste mit Erfolgsmeldung
         return redirect()->route('tasks.index')->with('success', 'Task erfolgreich gelöscht');
+    }
+
+    /**
+     * Filter die Tasks nach Status
+     */
+    public function filter($status)
+    {
+        if ($status === 'open') {
+            $tasks = Task::where('is_done', false)->orderBy('due_date')->get();
+        } elseif ($status === 'done') {
+            $tasks = Task::where('is_done', true)->orderBy('due_date')->get();
+        } else {
+            $tasks = Task::orderBy('is_done')->orderBy('due_date')->get();
+        }
+        return view('tasks.index', compact('tasks', 'status'));
     }
 }
