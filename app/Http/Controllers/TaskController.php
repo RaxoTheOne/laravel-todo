@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Task;
@@ -10,33 +9,31 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-{
-    // Eingabe aus Suchfeld lesen
-    $search = $request->input('search');
+    public function  index(Request $request) {
+        $search = $request->input('search');
+        $filter = $request->input('filter');
 
-    // Query aufbauen
-    $query = Task::query();
+                                                  // 🔹 Neue Einstellung: wie viele pro Seite
+        $perPage = $request->input('perPage', 5); // Default = 5
 
-    if ($search) {
-        $query->where('title', 'like', '%' . $search . '%')
-            ->orWhere('description', 'like', '%' . $search . '%');
+        $query = Task::query();
+
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        if ($filter === 'done') {
+            $query->where('is_done', true);
+        } elseif ($filter === 'open') {
+            $query->where('is_done', false);
+        }
+
+        // Mit Pagination
+        $tasks = $query->orderBy('is_done')->orderBy('due_date')->paginate($perPage);
+
+        return view('tasks.index', compact('tasks', 'search', 'filter', 'perPage'));
     }
-
-    // Filter nach Status (falls gesetzt)
-    $filter = $request->input('filter');
-    if ($filter === 'done') {
-        $query->where('is_done', true);
-    } elseif ($filter === 'open') {
-        $query->where('is_done', false);
-    }
-
-    // Aufgaben laden
-    $tasks = $query->orderBy('is_done')->orderBy('due_date')->paginate(5);
-
-    return view('tasks.index', compact('tasks', 'search', 'filter'));
-}
-
 
     /**
      * Show the form for creating a new resource.
@@ -53,9 +50,9 @@ class TaskController extends Controller
     {
         // Validation der Eingaben
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'due_date' => 'nullable|date',
+            'due_date'    => 'nullable|date',
         ]);
 
         // Task speichern
@@ -87,7 +84,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         // Prüfen: Kommt nur ein Status-Update oder auch andere Eingaben?
-        if ($request->has('is_done') && !$request->has('title')) {
+        if ($request->has('is_done') && ! $request->has('title')) {
             $task->is_done = $request->input('is_done');
             $task->save();
             return redirect()->route('tasks.index')->with('success', 'Task wurde aktualisiert!');
@@ -96,10 +93,10 @@ class TaskController extends Controller
 
         // Validation der Eingaben
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'due_date' => 'nullable|date',
-            'is_done' => 'nullable|boolean',
+            'due_date'    => 'nullable|date',
+            'is_done'     => 'nullable|boolean',
         ]);
 
         // Task aktualisieren
@@ -137,7 +134,7 @@ class TaskController extends Controller
 
     public function updateStatus(Task $task)
     {
-        $task->is_done = !$task->is_done; // erledigt/offen umschalten
+        $task->is_done = ! $task->is_done; // erledigt/offen umschalten
         $task->save();
 
         return redirect()->route('tasks.index')->with('success', 'Task wurde geändert!');
