@@ -21,6 +21,13 @@
             </select>
         </div>
         <div class="col-md-2">
+            <select name="perPage" class="form-select" onchange="this.form.submit()">
+                <option value="5" {{ request('perPage') == 5 ? 'selected' : '' }}>5 pro Seite</option>
+                <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 pro Seite</option>
+                <option value="20" {{ request('perPage') == 20 ? 'selected' : '' }}>20 pro Seite</option>
+            </select>
+        </div>
+        <div class="col-md-2">
             <button type="submit" class="btn btn-success w-100">Filtern</button>
         </div>
         <div class="col-md-2">
@@ -62,6 +69,6 @@
 
     <!-- Pagination-Links -->
     <div class="mt-3">
-        {{ $tasks->links() }}
+        {{ $tasks->appends(request()->query())->links() }}
     </div>
 @endsection
