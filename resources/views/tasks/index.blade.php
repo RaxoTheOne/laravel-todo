@@ -5,6 +5,16 @@
 
 <a href="{{ route('tasks.create') }}">Neue Task erstellen</a>
 
+<hr>
+
+<!-- Filter-Buttons -->
+<div>
+    <a href="{{ route('tasks.index') }}">Alle Tasks</a>
+    <a href="{{ route('tasks.filter', 'open') }}">Offene Tasks</a>
+    <a href="{{ route('tasks.filter', 'done') }}">Erledigte Tasks</a>
+</div>
+<hr>
+
 <ul>
     @foreach ($tasks as $task)
         <li style="{{ $task->is_done ? 'text-decoration: line-through; color:gray' : '' }}">
@@ -13,7 +23,9 @@
                 (fällig: {{ $task->due_date }})
             @endif
             @if ($task->is_done)
-                ✅
+                ✅ erledigt!
+            @else
+                ⌛ offen!
             @endif
 
             <!-- Bearbeiten -->
