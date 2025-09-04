@@ -32,7 +32,7 @@ class TaskController extends Controller
     }
 
     // Aufgaben laden
-    $tasks = $query->orderBy('is_done')->orderBy('due_date')->get();
+    $tasks = $query->orderBy('is_done')->orderBy('due_date')->paginate(5);
 
     return view('tasks.index', compact('tasks', 'search', 'filter'));
 }
@@ -133,5 +133,13 @@ class TaskController extends Controller
             $tasks = Task::orderBy('is_done')->orderBy('due_date')->get();
         }
         return view('tasks.index', compact('tasks', 'status'));
+    }
+
+    public function updateStatus(Task $task)
+    {
+        $task->is_done = !$task->is_done; // erledigt/offen umschalten
+        $task->save();
+
+        return redirect()->route('tasks.index')->with('success', 'Task wurde geändert!');
     }
 }
