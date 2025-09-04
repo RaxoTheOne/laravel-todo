@@ -1,0 +1,60 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "intelephense.diagnostics.undefinedTypes": false,
+        "intelephense.diagnostics.undefinedMethods": false,
+        "intelephense.diagnostics.undefinedFunctions": false,
+        "intelephense.diagnostics.undefinedProperties": false,
+        "intelephense.diagnostics.undefinedClassConstants": false,
+        "intelephense.diagnostics.undefinedVariables": false,
+        "intelephense.diagnostics.undefinedConstants": false,
+        "intelephense.diagnostics.unusedSymbols": false,
+        "intelephense.diagnostics.undefinedSymbols": false,
+        "intelephense.files.exclude": [
+            "**/vendor/**",
+            "**/node_modules/**",
+            "**/storage/**",
+            "**/bootstrap/cache/**"
+        ],
+        "intelephense.diagnostics.run": "onType",
+        "files.exclude": {
+            "**/vendor": true,
+            "**/node_modules": true,
+            "**/storage": true,
+            "**/bootstrap/cache": true,
+            "vendor": true,
+            "node_modules": true,
+            "storage": true,
+            "bootstrap/cache": true
+        },
+        "search.exclude": {
+            "**/vendor": true,
+            "**/node_modules": true,
+            "**/storage": true,
+            "**/bootstrap/cache": true,
+            "vendor": true,
+            "node_modules": true,
+            "storage": true,
+            "bootstrap/cache": true
+        },
+        "explorer.excludeGitIgnore": true,
+        "files.watcherExclude": {
+            "**/vendor/**": true,
+            "**/node_modules/**": true,
+            "**/storage/**": true,
+            "**/bootstrap/cache/**": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "bmewburn.vscode-intelephense-client",
+            "onecentlin.laravel-blade",
+            "amirmarmul.laravel-vscode"
+        ]
+    }
+}
+
