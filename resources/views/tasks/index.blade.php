@@ -59,4 +59,9 @@
             <li class="list-group-item">Keine Tasks gefunden.</li>
         @endforelse
     </ul>
+
+    <!-- Pagination-Links -->
+    <div class="mt-3">
+        {{ $tasks->links() }}
+    </div>
 @endsection
