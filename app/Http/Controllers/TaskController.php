@@ -10,14 +10,33 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        // Alle Tasksabrufen
-        $tasks = Task::all();
+    public function index(Request $request)
+{
+    // Eingabe aus Suchfeld lesen
+    $search = $request->input('search');
 
-        // View zurückgeben und Tasks übergeben
-        return view('tasks.index', compact('tasks'));
+    // Query aufbauen
+    $query = Task::query();
+
+    if ($search) {
+        $query->where('title', 'like', '%' . $search . '%')
+            ->orWhere('description', 'like', '%' . $search . '%');
     }
+
+    // Filter nach Status (falls gesetzt)
+    $filter = $request->input('filter');
+    if ($filter === 'done') {
+        $query->where('is_done', true);
+    } elseif ($filter === 'open') {
+        $query->where('is_done', false);
+    }
+
+    // Aufgaben laden
+    $tasks = $query->orderBy('is_done')->orderBy('due_date')->get();
+
+    return view('tasks.index', compact('tasks', 'search', 'filter'));
+}
+
 
     /**
      * Show the form for creating a new resource.
